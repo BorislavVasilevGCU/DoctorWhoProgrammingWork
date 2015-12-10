@@ -8,7 +8,7 @@
 
 /*
 =================================================================
- Defualt Constructor
+Defualt Constructor
 =================================================================
 */
 cButton::cButton()
@@ -87,7 +87,7 @@ Update the sprite position
 =================================================================
 */
 
-void cButton::update()
+void cButton::update(float deltaTime)
 {
 
 	if (m_InputMgr->getLeftMouseBtn())
@@ -114,7 +114,7 @@ void cButton::update(string fileName, string map)
 			buttonClickedRC.x = (int)(areaClicked.x - spritePos2D.x) / textureWidth;
 			buttonClickedRC.y = (int)(areaClicked.y - spritePos2D.y) / textureHeight;
 			clicked = true;
-			
+
 			cFileHandler aFile(fileName);
 
 			if (!aFile.openFile(ios::out)) //open file clearing the contents

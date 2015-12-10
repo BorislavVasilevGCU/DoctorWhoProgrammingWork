@@ -40,9 +40,9 @@
 using namespace std;
 
 //Define the string to appear in the top left corner of the window
-#define WINDOW_TITLE "Maze Maker"
+#define WINDOW_TITLE "Doctor Who"
 
 // This header file contains all the constants & enumarated types for the game
-enum gameState {MENU, INSTRUCTIONS, CREATEMAZE, PLAYING, END};
+enum gameState { MENU, INSTRUCTIONS, CREATEMAZE, PLAYING, END };
 enum btnTypes { EXIT, INSTRUCT, LOAD, PLAY, SAVE, SETTINGS };
 #endif

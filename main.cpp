@@ -12,37 +12,38 @@
 #include "cSprite.h"
 #include "cBkGround.h"
 #include "cFontMgr.h"
+#include "asteroidsGame.h"
 #include "mazeMaker.h"
 #include "cFileHandler.h"
 #include "cButton.h"
 
 int WINAPI WinMain(HINSTANCE hInstance,
-                   HINSTANCE hPrevInstance,
-                   LPSTR cmdLine,
-                   int cmdShow)
+	HINSTANCE hPrevInstance,
+	LPSTR cmdLine,
+	int cmdShow)
 {
 
-    //Set our window settings
-    const int windowWidth = 1024;
-    const int windowHeight = 768;
-    const int windowBPP = 16;
+	//Set our window settings
+	const int windowWidth = 1024;
+	const int windowHeight = 768;
+	const int windowBPP = 16;
 
 
 
-    //This is our window
+	//This is our window
 	static cWNDManager* pgmWNDMgr = cWNDManager::getInstance();
 
 	// This is the input manager
 	static cInputMgr* theInputMgr = cInputMgr::getInstance();
-	
+
 	// This is the Font manager
 	static cFontMgr* theFontMgr = cFontMgr::getInstance();
 
 
-    //The example OpenGL code
-    windowOGL theOGLWnd;
-	
-    //Attach our the OpenGL window
+	//The example OpenGL code
+	windowOGL theOGLWnd;
+
+	//Attach our the OpenGL window
 	pgmWNDMgr->attachOGLWnd(&theOGLWnd);
 
 	// Attach the keyboard manager
@@ -50,35 +51,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	// Cube
 
-    //Attempt to create the window
+	//Attempt to create the window
 	if (!pgmWNDMgr->createWND(windowWidth, windowHeight, windowBPP))
-    {
-        //If it fails
+	{
+		//If it fails
 
-        MessageBox(NULL, "Unable to create the OpenGL Window", "An error occurred", MB_ICONERROR | MB_OK);
+		MessageBox(NULL, "Unable to create the OpenGL Window", "An error occurred", MB_ICONERROR | MB_OK);
 		pgmWNDMgr->destroyWND(); //Reset the display and exit
-        return 1;
-    }
+		return 1;
+	}
 
 	if (!theOGLWnd.initOGL(windowWidth, windowHeight)) //Initialize our example
-    {
-        MessageBox(NULL, "Could not initialize the application", "An error occurred", MB_ICONERROR | MB_OK);
+	{
+		MessageBox(NULL, "Could not initialize the application", "An error occurred", MB_ICONERROR | MB_OK);
 		pgmWNDMgr->destroyWND(); //Reset the display and exit
-        return 1;
-    }
-
-	//Clear key buffers
-	theInputMgr->clearBuffers(theInputMgr->KEYS_DOWN_BUFFER | theInputMgr->KEYS_PRESSED_BUFFER | theInputMgr->MOUSE_BUFFER);
-
-	int map[8][8] = { { 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 } };
-
+		return 1;
+	}
 	// load game fontss
 	// Load Fonts
 	LPCSTR gameFonts[2] = { "Fonts/digital-7.ttf", "Fonts/space age.ttf" };
@@ -87,12 +75,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	theFontMgr->addFont("Space", gameFonts[1], 24);
 
 	// Create vector array of textures
-	vector<cTexture*> textureList;
-	LPCSTR texturesToUse[] = { "Images/blank.png","Images/Track/straightHR.png", "Images/Track/straightVR.png", "Images/Track/bendLD.png", "Images/Track/bendRD.png", "Images/Track/bendLU.png", "Images/Track/bendRU.png"};
+	LPCSTR texturesToUse[] = { "Images//progrDH//dalek1.png", "Images//progrDH//dalek2.png", "Images//progrDH//dalek3.png", "Images//progrDH//dalek4.png", "Images//progrDH//dalek5.png", "Images//progrDH//dalek6.png", "Images//progrDH//Laser.png", };
 	for (int tCount = 0; tCount < 7; tCount++)
 	{
-		textureList.push_back(new cTexture());
-		textureList[tCount]->createTexture(texturesToUse[tCount]);
+		theGameTextures.push_back(new cTexture());
+		theGameTextures[tCount]->createTexture(texturesToUse[tCount]);
 	}
 
 	/// Create vector array of textures
@@ -122,20 +109,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	endScreenBkg.setTexture(textureBkgList[2]->getTexture());
 	endScreenBkg.setTextureDimensions(textureBkgList[2]->getTWidth(), textureBkgList[2]->getTHeight());
 
-	cTileMap tileMap(textureList, map);
-	tileMap.attachInputMgr(theInputMgr); // Attach the input manager to the sprite
-	tileMap.setSpritePos(glm::vec2(100.0f, 100.0f));
-
-	cTilePicker roadMap(textureList, map);
-	roadMap.attachInputMgr(theInputMgr); // Attach the input manager to the sprite
-	roadMap.setSpritePos(glm::vec2(740.0f, 100.0f));
-
-	cTile tileToDrag;
-	tileToDrag.attachInputMgr(theInputMgr);
-	tileToDrag.setSpritePos(glm::vec2(0.0f, 00.0f));
-	tileToDrag.setTexture(transSprite.getTexture());
-	tileToDrag.setTextureDimensions(transSprite.getTWidth(), transSprite.getTHeight());
-
 	vector<cTexture*> btnTextureList;
 	LPCSTR btnTexturesToUse[] = { "Images/StartButton.png", "Images/HowToPlayButton.png", "Images/ExitButton.png", "Images/ReplayButton.png", "Images/BackButton.png" };
 	for (int tCount = 0; tCount < 5; tCount++)
@@ -164,135 +137,175 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	howToPlayButton.setTexture(btnTextureList[1]->getTexture());
 	howToPlayButton.setTextureDimensions(btnTextureList[1]->getTWidth(), btnTextureList[1]->getTHeight());
 
+	cButton backButton;
+	backButton.attachInputMgr(theInputMgr);
+	backButton.setTexture(btnTextureList[4]->getTexture());
+	backButton.setTextureDimensions(btnTextureList[4]->getTWidth(), btnTextureList[4]->getTHeight());
+
 	// include an exit button
 
 	cFileHandler theFile("Data/usermap.dat");
 	string mapData;
 
 	string outputMsg;
-	string strMsg[] = { "Create and Save your own Track!","Drag and Drop the tiles.", "Road Mapper", "Thanks for playing!","See you again soon!" };
+	string strMsg[] = { "Destroy as many enemy Daleks as possible!", "Use the keys to pilot the TARDIS.", "Doctor Who", "Thanks for playing!", "See you again soon!" };
 
-	if (!theFile.openFile(ios::in)) //open file for input output
-	{
-		MessageBox(NULL, "Could not open specified file.", "An error occurred", MB_ICONERROR | MB_OK);
-	}
-	else
-	{
-		mapData = theFile.readDataFromFile();
-		theFile.closeFile();
-		// Fill map with data from file
-		int strPos = 0;
-		for (int row = 0; row < 8; row++)
+
+		gameState theGameState = MENU;
+		btnTypes theBtnType = EXIT;
+
+		//This is the mainloop, we render frames until isRunning returns false
+		while (pgmWNDMgr->isWNDRunning())
 		{
-			for (int column = 0; column < 8; column++)
+			pgmWNDMgr->processWNDEvents(); //Process any window events
+
+			//We get the time that passed since the last frame
+			float elapsedTime = pgmWNDMgr->getElapsedSeconds();
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			switch (theGameState)
 			{
-				if (mapData[strPos] != ',')
-				{
-					map[row][column] = mapData[strPos] - 48;
-					strPos+= 2;
-				}
+			case MENU:
+			{
+						 startMenuBkg.render();
+
+						 playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
+						 howToPlayButton.setSpritePos(glm::vec2(400.0f, 375.0f));
+						 exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
+						 playButton.render();
+						 howToPlayButton.render();
+						 exitButton.render();
+
+						 theGameState = playButton.update(theGameState, PLAYING);
+						 theGameState = howToPlayButton.update(theGameState, INSTRUCTIONS);
+						 exitButton.update(elapsedTime);
+
+						 outputMsg = strMsg[2];
+						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+
+						 if (exitButton.getClicked())
+						 {
+							 SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
+						 }
 			}
+				break;
+
+			case INSTRUCTIONS:
+			{
+								 startMenuBkg.render();
+
+								 backButton.setSpritePos(glm::vec2(400.0f, 500.0f));
+								 backButton.render();
+
+								 theGameState = backButton.update(theGameState, MENU);
+
+								 outputMsg = strMsg[2];
+								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+								 outputMsg = strMsg[0];
+								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
+								 outputMsg = strMsg[1];
+								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
+			}
+				break;
+
+			case PLAYING:
+			{
+							mainLevelBkg.render();
+
+							// render button and reset clicked to false
+							exitButton.setSpritePos(glm::vec2(740.0f, 575.0f));
+							exitButton.render();
+							theGameState = exitButton.update(theGameState, END);
+
+							outputMsg = strMsg[2];
+							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+
+
+
+							for (int astro = 0; astro < 15; astro++)
+							{
+								theAsteroids.push_back(new cAsteroid);
+								theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 7 + 2), -10.0f));
+								theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 10 + 1), 100.0f));
+								theAsteroids[astro]->setTexture(theGameTextures[rand() % 6]->getTexture());
+								theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 6]->getTWidth(), theGameTextures[rand() % 6]->getTHeight());
+								theAsteroids[astro]->setSpriteCentre();
+								theAsteroids[astro]->setAsteroidVelocity(glm::vec2(glm::vec2(0.0f, 0.0f)));
+								theAsteroids[astro]->setActive(true);
+								theAsteroids[astro]->setMdlRadius();
+							}
+
+							cTexture rocketTxt;
+							rocketTxt.createTexture("Images\\Doctor-Who-TARDIS-Air-Freshenersmall.png");
+							cRocket rocketSprite;
+							rocketSprite.attachInputMgr(theInputMgr); // Attach the input manager to the sprite
+							rocketSprite.setSpritePos(glm::vec2(512.0f, 380.0f));
+							rocketSprite.setTexture(rocketTxt.getTexture());
+							rocketSprite.setTextureDimensions(rocketTxt.getTWidth(), rocketTxt.getTHeight());
+							rocketSprite.setSpriteCentre();
+							rocketSprite.setRocketVelocity(glm::vec2(0.0f, 0.0f));
+
+							rocketSprite.update(elapsedTime);
+							rocketSprite.render();
+
+
+								vector<cAsteroid*>::iterator index = theAsteroids.begin();
+								while (index != theAsteroids.end())
+								{
+									if ((*index)->isActive() == false)
+									{
+										index = theAsteroids.erase(index);
+									}
+									else
+									{
+										(*index)->update(elapsedTime);
+										(*index)->render();
+										++index;
+									}
+								}
+							
+			}
+				break;
+
+			case END:
+			{
+						endScreenBkg.render();
+
+						playButton.setClicked(false);
+						exitButton.setClicked(false);
+						replayButton.setClicked(false);
+
+						playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
+						replayButton.setSpritePos(glm::vec2(400.0f, 375.0f));
+						exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
+						playButton.render();
+						replayButton.render();
+						exitButton.render();
+
+						theGameState = playButton.update(theGameState, PLAYING);
+						exitButton.update(elapsedTime);
+
+						outputMsg = strMsg[2];
+						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+						outputMsg = strMsg[3];
+						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
+						outputMsg = strMsg[4];
+						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
+						if (exitButton.getClicked())
+						{
+							SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
+						}
+			}
+				break;
+			}
+
+			pgmWNDMgr->swapBuffers();
+			theInputMgr->clearBuffers(theInputMgr->KEYS_DOWN_BUFFER | theInputMgr->KEYS_PRESSED_BUFFER | theInputMgr->MOUSE_BUFFER);
 		}
+
+		theOGLWnd.shutdown(); //Free any resources
+		pgmWNDMgr->destroyWND(); //Destroy the program window
+
+		return 0; //Return success
 	}
-
-	tileMap.initialiseMap(map);
-
-	gameState theGameState = MENU;
-	btnTypes theBtnType = EXIT;
-
-	//This is the mainloop, we render frames until isRunning returns false
-	while (pgmWNDMgr->isWNDRunning())
-    {
-		pgmWNDMgr->processWNDEvents(); //Process any window events
-
-        //We get the time that passed since the last frame
-		float elapsedTime = pgmWNDMgr->getElapsedSeconds();
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		switch (theGameState)
-		{
-		case MENU:
-			startMenuBkg.render();
-
-			playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
-			exitButton.setSpritePos(glm::vec2(400.0f, 400.0f));
-			playButton.render();
-			exitButton.render();
-
-			theGameState = playButton.update(theGameState, PLAYING);
-			exitButton.update();
-
-
-			outputMsg = strMsg[2];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
-			outputMsg = strMsg[0];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
-			outputMsg = strMsg[1];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
-			if (exitButton.getClicked())
-			{
-				SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
-			}
-			break;
-		case PLAYING:
-			mainLevelBkg.render();
-
-			roadMap.update();
-			roadMap.render();
-			tileMap.update();
-			tileMap.render();
-			tileMap.renderGridLines();
-			tileToDrag.update();
-			tileToDrag.render();
-
-			// render button and reset clicked to false
-
-			exitButton.setSpritePos(glm::vec2(740.0f, 575.0f));
-			exitButton.render();
-			theGameState = exitButton.update(theGameState, END);
-
-			outputMsg = strMsg[2];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
-
-			break;
-		case END:
-			endScreenBkg.render();
-
-			playButton.setClicked(false);
-			exitButton.setClicked(false);
-			replayButton.setClicked(false);
-
-			playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
-			replayButton.setSpritePos(glm::vec2(400.0f, 400.0f));
-			exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
-			playButton.render();
-			replayButton.render();
-			exitButton.render();
-
-			theGameState = playButton.update(theGameState, PLAYING);
-			exitButton.update();
-
-			outputMsg = strMsg[2];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
-			outputMsg = strMsg[3];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
-			outputMsg = strMsg[4];
-			theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
-			if (exitButton.getClicked())
-			{
-				SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
-			}
-
-			break;
-		}
-
-		pgmWNDMgr->swapBuffers();
-		//theInputMgr->clearBuffers(theInputMgr->KEYS_DOWN_BUFFER | theInputMgr->KEYS_PRESSED_BUFFER | theInputMgr->MOUSE_BUFFER);
-    }
-
-	theOGLWnd.shutdown(); //Free any resources
-	pgmWNDMgr->destroyWND(); //Destroy the program window
-
-    return 0; //Return success
-}

@@ -8,7 +8,6 @@ cButton.h
 #ifndef _CBUTTON_H
 #define _CBUTTON_H
 #include "cSprite.h"
-#include "mazeMaker.h"
 #include "cFileHandler.h"
 
 
@@ -18,7 +17,7 @@ class cButton : public cSprite
 private:
 
 	glm::ivec2 buttonClickedRC;
-	bool clicked = false; 
+	bool clicked = false;
 
 public:
 	cButton();
@@ -28,10 +27,9 @@ public:
 
 	void render();		// Default render function
 	void render(int textureToRender);		// Default render function
-	void update();
+	void update(float deltaTime);
 	void update(string fileName, string map);
 	gameState update(gameState theCurrentGameState, gameState newGameState);
-
 	bool getClicked();
 	void setClicked(bool state);
 

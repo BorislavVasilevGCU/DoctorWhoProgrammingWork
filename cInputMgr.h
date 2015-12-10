@@ -1,4 +1,4 @@
-/*
+/*/*
 == == == == == == == == =
 cInputMgr.h
 - Header file for class definition - SPECIFICATION

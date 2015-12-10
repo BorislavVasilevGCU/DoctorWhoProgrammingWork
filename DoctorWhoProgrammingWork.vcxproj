@@ -64,6 +64,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\DoctorWhoGame\DoctorWhoGame\asteroidsGame.cpp" />
+    <ClCompile Include="..\..\DoctorWhoGame\DoctorWhoGame\cAsteroid.cpp" />
+    <ClCompile Include="..\..\DoctorWhoGame\DoctorWhoGame\cBullet.cpp" />
+    <ClCompile Include="..\..\DoctorWhoGame\DoctorWhoGame\cRocket.cpp" />
     <ClCompile Include="cBkGround.cpp" />
     <ClCompile Include="cButton.cpp" />
     <ClCompile Include="cFileHandler.cpp" />
@@ -81,12 +85,16 @@
     <ClCompile Include="windowOGL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="asteroidsGame.h" />
+    <ClInclude Include="cAsteroid.h" />
     <ClInclude Include="cBkGround.h" />
+    <ClInclude Include="cBullet.h" />
     <ClInclude Include="cButton.h" />
     <ClInclude Include="cFileHandler.h" />
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cFontMgr.h" />
     <ClInclude Include="cInputMgr.h" />
+    <ClInclude Include="cRocket.h" />
     <ClInclude Include="cSprite.h" />
     <ClInclude Include="cTexture.h" />
     <ClInclude Include="cTile.h" />

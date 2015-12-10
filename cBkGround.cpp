@@ -16,6 +16,6 @@ Update the sprite position
 =================================================================
 */
 
-void cBkGround::update()
+void cBkGround::update(float deltaTime)
 {
 }
