@@ -76,9 +76,6 @@
     <ClCompile Include="cInputMgr.cpp" />
     <ClCompile Include="cSprite.cpp" />
     <ClCompile Include="cTexture.cpp" />
-    <ClCompile Include="cTile.cpp" />
-    <ClCompile Include="cTileMap.cpp" />
-    <ClCompile Include="cTilePicker.cpp" />
     <ClCompile Include="cWNDManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mazeMaker.cpp" />
@@ -97,9 +94,6 @@
     <ClInclude Include="cRocket.h" />
     <ClInclude Include="cSprite.h" />
     <ClInclude Include="cTexture.h" />
-    <ClInclude Include="cTile.h" />
-    <ClInclude Include="cTileMap.h" />
-    <ClInclude Include="cTilePicker.h" />
     <ClInclude Include="cWNDManager.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="mazeMaker.h" />

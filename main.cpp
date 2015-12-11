@@ -75,7 +75,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	theFontMgr->addFont("Space", gameFonts[1], 24);
 
 	// Create vector array of textures
-	LPCSTR texturesToUse[] = { "Images//progrDH//dalek1.png", "Images//progrDH//dalek2.png", "Images//progrDH//dalek3.png", "Images//progrDH//dalek4.png", "Images//progrDH//dalek5.png", "Images//progrDH//dalek6.png", "Images//progrDH//Laser.png", };
+	LPCSTR texturesToUse[] = { "Images//dalek1.png", "Images//dalek2.png", "Images//dalek3.png", "Images//dalek4.png", "Images//dalek5.png", "Images//dalek6.png", "Images//Laser.png", };
 	for (int tCount = 0; tCount < 7; tCount++)
 	{
 		theGameTextures.push_back(new cTexture());
@@ -150,11 +150,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	string outputMsg;
 	string strMsg[] = { "Destroy as many enemy Daleks as possible!", "Use the keys to pilot the TARDIS.", "Doctor Who", "Thanks for playing!", "See you again soon!" };
 
+	cTexture rocketTxt;
+	rocketTxt.createTexture("Images\\Doctor-Who-TARDIS-Air-Freshenersmall.png");
+	cRocket rocketSprite;
+	rocketSprite.attachInputMgr(theInputMgr); // Attach the input manager to the sprite
+	rocketSprite.setSpritePos(glm::vec2(512.0f, 380.0f));
+	rocketSprite.setTexture(rocketTxt.getTexture());
+	rocketSprite.setTextureDimensions(rocketTxt.getTWidth(), rocketTxt.getTHeight());
+	rocketSprite.setSpriteCentre();
+	rocketSprite.setRocketVelocity(glm::vec2(0.0f, 0.0f));
 
 		gameState theGameState = MENU;
 		btnTypes theBtnType = EXIT;
 
-		//This is the mainloop, we render frames until isRunning returns false
 		while (pgmWNDMgr->isWNDRunning())
 		{
 			pgmWNDMgr->processWNDEvents(); //Process any window events
@@ -164,6 +172,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			
+
+			
+
+			//This is the mainloop, we render frames until isRunning returns false
 			switch (theGameState)
 			{
 			case MENU:
@@ -179,7 +192,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 						 theGameState = playButton.update(theGameState, PLAYING);
 						 theGameState = howToPlayButton.update(theGameState, INSTRUCTIONS);
-						 exitButton.update(elapsedTime);
 
 						 outputMsg = strMsg[2];
 						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
@@ -208,66 +220,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
 			}
 				break;
-
-			case PLAYING:
-			{
-							mainLevelBkg.render();
-
-							// render button and reset clicked to false
-							exitButton.setSpritePos(glm::vec2(740.0f, 575.0f));
-							exitButton.render();
-							theGameState = exitButton.update(theGameState, END);
-
-							outputMsg = strMsg[2];
-							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
-
-
-
-							for (int astro = 0; astro < 15; astro++)
-							{
-								theAsteroids.push_back(new cAsteroid);
-								theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 7 + 2), -10.0f));
-								theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 10 + 1), 100.0f));
-								theAsteroids[astro]->setTexture(theGameTextures[rand() % 6]->getTexture());
-								theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 6]->getTWidth(), theGameTextures[rand() % 6]->getTHeight());
-								theAsteroids[astro]->setSpriteCentre();
-								theAsteroids[astro]->setAsteroidVelocity(glm::vec2(glm::vec2(0.0f, 0.0f)));
-								theAsteroids[astro]->setActive(true);
-								theAsteroids[astro]->setMdlRadius();
-							}
-
-							cTexture rocketTxt;
-							rocketTxt.createTexture("Images\\Doctor-Who-TARDIS-Air-Freshenersmall.png");
-							cRocket rocketSprite;
-							rocketSprite.attachInputMgr(theInputMgr); // Attach the input manager to the sprite
-							rocketSprite.setSpritePos(glm::vec2(512.0f, 380.0f));
-							rocketSprite.setTexture(rocketTxt.getTexture());
-							rocketSprite.setTextureDimensions(rocketTxt.getTWidth(), rocketTxt.getTHeight());
-							rocketSprite.setSpriteCentre();
-							rocketSprite.setRocketVelocity(glm::vec2(0.0f, 0.0f));
-
-							rocketSprite.update(elapsedTime);
-							rocketSprite.render();
-
-
-								vector<cAsteroid*>::iterator index = theAsteroids.begin();
-								while (index != theAsteroids.end())
-								{
-									if ((*index)->isActive() == false)
-									{
-										index = theAsteroids.erase(index);
-									}
-									else
-									{
-										(*index)->update(elapsedTime);
-										(*index)->render();
-										++index;
-									}
-								}
-							
-			}
-				break;
-
 			case END:
 			{
 						endScreenBkg.render();
@@ -284,7 +236,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						exitButton.render();
 
 						theGameState = playButton.update(theGameState, PLAYING);
-						exitButton.update(elapsedTime);
+
 
 						outputMsg = strMsg[2];
 						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
@@ -298,8 +250,61 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						}
 			}
 				break;
-			}
 
+
+			case PLAYING:
+			{
+
+							mainLevelBkg.render();
+
+							// render button and reset clicked to false
+							exitButton.setSpritePos(glm::vec2(740.0f, 575.0f));
+							exitButton.render();
+							theGameState = exitButton.update(theGameState, END);
+
+							outputMsg = strMsg[2];
+							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+
+
+
+							for (int astro = 0; astro < 15; astro++)
+							{
+								theAsteroids.push_back(new cAsteroid);
+								theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 7 + 2), 10.0f));
+								theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 10 + 1), 100.0f));
+								theAsteroids[astro]->setTexture(theGameTextures[rand() % 6]->getTexture());
+								theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 6]->getTWidth(), theGameTextures[rand() % 6]->getTHeight());
+								theAsteroids[astro]->setSpriteCentre();
+								theAsteroids[astro]->setAsteroidVelocity(glm::vec2(glm::vec2(0.0f, 0.0f)));
+								theAsteroids[astro]->setActive(true);
+								theAsteroids[astro]->setMdlRadius();
+							}
+
+							vector<cAsteroid*>::iterator index = theAsteroids.begin();
+							while (index != theAsteroids.end())
+							{
+								if ((*index)->isActive() == false)
+								{
+									index = theAsteroids.erase(index);
+								}
+								else
+								{
+									(*index)->update(elapsedTime);
+									(*index)->render();
+									++index;
+								}
+							}
+
+							rocketSprite.update(elapsedTime);
+							rocketSprite.render();
+
+							
+			}
+				break;
+
+
+
+			}
 			pgmWNDMgr->swapBuffers();
 			theInputMgr->clearBuffers(theInputMgr->KEYS_DOWN_BUFFER | theInputMgr->KEYS_PRESSED_BUFFER | theInputMgr->MOUSE_BUFFER);
 		}

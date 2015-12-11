@@ -19,7 +19,7 @@ public:
 	//cBullet(vector<cTexture*> tileTextList)
 
 	void render();		// Default render function
-	void update(float deltaTime);		// Bullet update method
+	void update();		// Bullet update method
 	void setBulletVelocity(glm::vec2 bulletVel);   // Sets the velocity for the Bullet
 	glm::vec2 getBulletVelocity();				 // Gets the Bullet velocity
 };

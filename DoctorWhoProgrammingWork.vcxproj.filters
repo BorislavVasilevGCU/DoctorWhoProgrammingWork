@@ -39,15 +39,6 @@
     <ClCompile Include="cTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cTile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cTileMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cTilePicker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cWNDManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,15 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cTileMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cTilePicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cWNDManager.h">
