@@ -63,6 +63,12 @@
     <ClCompile Include="..\..\DoctorWhoGame\DoctorWhoGame\cRocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cSound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cSoundMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cBkGround.h">
@@ -116,6 +122,12 @@
     <ClInclude Include="cRocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cSound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cSoundMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\DevIL.lib" />
@@ -123,5 +135,7 @@
     <Library Include="Libraries\ftgl.lib" />
     <Library Include="Libraries\ILU.lib" />
     <Library Include="Libraries\ILUT.lib" />
+    <Library Include="Libraries\alut.lib" />
+    <Library Include="Libraries\OpenAL32.lib" />
   </ItemGroup>
 </Project>

@@ -16,6 +16,9 @@
 #include "mazeMaker.h"
 #include "cFileHandler.h"
 #include "cButton.h"
+#include "cSoundMgr.h"
+#include "mmsystem.h"
+
 
 int WINAPI WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -35,6 +38,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	// This is the input manager
 	static cInputMgr* theInputMgr = cInputMgr::getInstance();
+
+	// This is the sound manager
+	static cSoundMgr* theSoundMgr = cSoundMgr::getInstance();
 
 	// This is the Font manager
 	static cFontMgr* theFontMgr = cFontMgr::getInstance();
@@ -67,6 +73,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		pgmWNDMgr->destroyWND(); //Reset the display and exit
 		return 1;
 	}
+
+	// load game sounds
+	// Load Sound
+	LPCSTR gameSounds[1] = { "Audio/131432__senitiel__lasershot.wav"};
+
+	//theSoundMgr->add("Theme", gameSounds[0]);
+	theSoundMgr->add("Shot", gameSounds[0]);
+
 	// load game fontss
 	// Load Fonts
 	LPCSTR gameFonts[2] = { "Fonts/digital-7.ttf", "Fonts/space age.ttf" };
@@ -165,6 +179,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	rocketSprite.setSpriteCentre();
 	rocketSprite.setRocketVelocity(glm::vec2(0.0f, 0.0f));
 
+	// Attach sound manager to rocket sprite
+	rocketSprite.attachSoundMgr(theSoundMgr);
+
 	for (int astro = 0; astro < 15; astro++)
 	{
 
@@ -193,16 +210,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			
-
 			
 
+			
+			
 			//This is the mainloop, we render frames until isRunning returns false
 			switch (theGameState)
 			{
 			case MENU:
-			{
+			{           
 						 startMenuBkg.render();
-
+						 
 						 playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
 						 howToPlayButton.setSpritePos(glm::vec2(390.0f, 375.0f));
 						 exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
@@ -216,6 +234,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 						 outputMsg = strMsg[2];
 						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
+						
 
 						 if (exitButton.getClicked())
 						 {

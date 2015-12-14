@@ -219,6 +219,11 @@ void cSprite::attachInputMgr(cInputMgr* inputMgr)
 {
 	m_InputMgr = inputMgr;
 }
+
+void cSprite::attachSoundMgr(cSoundMgr* soundMgr)
+{
+	m_SoundMgr = soundMgr;
+}
 /*
 =================
 - Determine the bounding rectangle for the sprite.

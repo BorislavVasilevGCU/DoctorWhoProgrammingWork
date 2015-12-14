@@ -15,11 +15,10 @@
 #include "IL\ilut.h"
 // Font
 #include "FTGL\ftgl.h"
-
 // Audio
-//#include "OpenAL\al.h"
-//#include "OpenAL\alc.h"
-//#include "OpenAL\alut.h"
+#include "OpenAL\al.h"
+#include "OpenAL\alc.h"
+#include "OpenAL\alut.h"
 // Maths functions
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"

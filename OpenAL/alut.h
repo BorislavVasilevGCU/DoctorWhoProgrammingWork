@@ -2,14 +2,14 @@
 #define AL_ALUT_H
 
 #if defined(_MSC_VER)
-#include <OpenAL\alc.h>
-#include <OpenAL\al.h>
+#include "OpenAL\alc.h"
+#include "OpenAL\al.h"
 #elif defined(__APPLE__)
-#include <OpenAL\alc.h>
-#include <OpenAL\al.h>
+#include "OpenAL\alc.h"
+#include "OpenAL\al.h"
 #else
-#include <OpenAL\al.h>
-#include <OpenAL\alc.h>
+#include "OpenAL\al.h"
+#include "OpenAL\alc.h"
 #endif
 
 #if defined(__cplusplus)
