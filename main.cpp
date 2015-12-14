@@ -84,8 +84,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	/// Create vector array of textures
 	vector<cTexture*> textureBkgList;
-	LPCSTR bkgTexturesToUse[] = { "Images/mainlevelbkgsprite.png", "Images/mainmenusprite.jpg", "Images/endgamsprite.jpg" };
-	for (int tCount = 0; tCount < 3; tCount++)
+	LPCSTR bkgTexturesToUse[] = { "Images/mainlevelbkgsprite.png", "Images/mainmenusprite.jpg", "Images/endgamsprite.jpg", "Images/keyboardbinds.png" };
+	for (int tCount = 0; tCount < 4; tCount++)
 	{
 		textureBkgList.push_back(new cTexture());
 		textureBkgList[tCount]->createTexture(bkgTexturesToUse[tCount]);
@@ -103,6 +103,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	startMenuBkg.setSpritePos(glm::vec2(0.0f, 0.0f));
 	startMenuBkg.setTexture(textureBkgList[1]->getTexture());
 	startMenuBkg.setTextureDimensions(textureBkgList[1]->getTWidth(), textureBkgList[1]->getTHeight());
+
+	cBkGround keybinds;
+	keybinds.setSpritePos(glm::vec2(0.0f, 200.0f));
+	keybinds.setTexture(textureBkgList[3]->getTexture());
+	keybinds.setTextureDimensions(963.0f, 450.0f);
 
 	cBkGround endScreenBkg;
 	endScreenBkg.setSpritePos(glm::vec2(0.0f, 0.0f));
@@ -148,7 +153,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	string mapData;
 
 	string outputMsg;
-	string strMsg[] = { "Destroy as many enemy Daleks as possible!", "Use the keys to pilot the TARDIS.", "Doctor Who", "Thanks for playing!", "See you again soon!" };
+	string strMsg[] = { "Destroy as many enemy Daleks as possible!", "Use the keys to pilot the TARDIS.", "Doctor Who", "Thanks for playing!", "See you again soon!", "Score:" };
 
 	cTexture rocketTxt;
 	rocketTxt.createTexture("Images\\Doctor-Who-TARDIS-Air-Freshenersmall.png");
@@ -164,7 +169,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	{
 
 		theAsteroids.push_back(new cAsteroid);
-		theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 7 + 2), windowHeight / (rand() % 5 + 1)));
+		theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 9 + 1), -10.0f));
 		theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 5 + 1), 100.0f));
 		theAsteroids[astro]->setTexture(theGameTextures[rand() % 7]->getTexture());
 		theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 7]->getTWidth(), theGameTextures[rand() % 7]->getTHeight());
@@ -222,6 +227,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			case INSTRUCTIONS:
 			{
 								 startMenuBkg.render();
+								 keybinds.render();
+
 
 								 backButton.setSpritePos(glm::vec2(400.0f, 650.0f));
 								 backButton.render();
@@ -251,8 +258,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 							outputMsg = strMsg[2];
 							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 
-
 							
+							outputMsg = strMsg[5];
+							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
 							
 							
 						
