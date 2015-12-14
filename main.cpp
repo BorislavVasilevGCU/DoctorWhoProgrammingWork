@@ -160,6 +160,21 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	rocketSprite.setSpriteCentre();
 	rocketSprite.setRocketVelocity(glm::vec2(0.0f, 0.0f));
 
+	for (int astro = 0; astro < 15; astro++)
+	{
+
+		theAsteroids.push_back(new cAsteroid);
+		theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 7 + 2), windowHeight / (rand() % 5 + 1)));
+		theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 5 + 1), 100.0f));
+		theAsteroids[astro]->setTexture(theGameTextures[rand() % 7]->getTexture());
+		theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 7]->getTWidth(), theGameTextures[rand() % 7]->getTHeight());
+		theAsteroids[astro]->setSpriteCentre();
+		theAsteroids[astro]->setAsteroidVelocity(glm::vec2(glm::vec2(0.0f, 0.0f)));
+		theAsteroids[astro]->setActive(true);
+		theAsteroids[astro]->setMdlRadius();
+
+	}
+
 		gameState theGameState = MENU;
 		btnTypes theBtnType = EXIT;
 
@@ -184,7 +199,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						 startMenuBkg.render();
 
 						 playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
-						 howToPlayButton.setSpritePos(glm::vec2(400.0f, 375.0f));
+						 howToPlayButton.setSpritePos(glm::vec2(390.0f, 375.0f));
 						 exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
 						 playButton.render();
 						 howToPlayButton.render();
@@ -192,9 +207,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 						 theGameState = playButton.update(theGameState, PLAYING);
 						 theGameState = howToPlayButton.update(theGameState, INSTRUCTIONS);
+						 exitButton.update(elapsedTime);
 
 						 outputMsg = strMsg[2];
-						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 
 						 if (exitButton.getClicked())
 						 {
@@ -207,51 +223,21 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			{
 								 startMenuBkg.render();
 
-								 backButton.setSpritePos(glm::vec2(400.0f, 500.0f));
+								 backButton.setSpritePos(glm::vec2(400.0f, 650.0f));
 								 backButton.render();
 
 								 theGameState = backButton.update(theGameState, MENU);
 
 								 outputMsg = strMsg[2];
-								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 								 outputMsg = strMsg[0];
 								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
 								 outputMsg = strMsg[1];
 								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
 			}
 				break;
-			case END:
-			{
-						endScreenBkg.render();
 
-						playButton.setClicked(false);
-						exitButton.setClicked(false);
-						replayButton.setClicked(false);
-
-						playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
-						replayButton.setSpritePos(glm::vec2(400.0f, 375.0f));
-						exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
-						playButton.render();
-						replayButton.render();
-						exitButton.render();
-
-						theGameState = playButton.update(theGameState, PLAYING);
-
-
-						outputMsg = strMsg[2];
-						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
-						outputMsg = strMsg[3];
-						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
-						outputMsg = strMsg[4];
-						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
-						if (exitButton.getClicked())
-						{
-							SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
-						}
-			}
-				break;
-
-
+				
 			case PLAYING:
 			{
 
@@ -263,23 +249,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 							theGameState = exitButton.update(theGameState, END);
 
 							outputMsg = strMsg[2];
-							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
+							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 
 
-
-							for (int astro = 0; astro < 15; astro++)
-							{
-								theAsteroids.push_back(new cAsteroid);
-								theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 7 + 2), 10.0f));
-								theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 10 + 1), 100.0f));
-								theAsteroids[astro]->setTexture(theGameTextures[rand() % 6]->getTexture());
-								theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 6]->getTWidth(), theGameTextures[rand() % 6]->getTHeight());
-								theAsteroids[astro]->setSpriteCentre();
-								theAsteroids[astro]->setAsteroidVelocity(glm::vec2(glm::vec2(0.0f, 0.0f)));
-								theAsteroids[astro]->setActive(true);
-								theAsteroids[astro]->setMdlRadius();
-							}
-
+							
+							
+							
+						
 							vector<cAsteroid*>::iterator index = theAsteroids.begin();
 							while (index != theAsteroids.end())
 							{
@@ -297,10 +273,44 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 							rocketSprite.update(elapsedTime);
 							rocketSprite.render();
+							
 
 							
 			}
 				break;
+
+			case END:
+			{
+						endScreenBkg.render();
+
+						playButton.setClicked(false);
+						exitButton.setClicked(false);
+						replayButton.setClicked(false);
+
+						playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
+						replayButton.setSpritePos(glm::vec2(400.0f, 375.0f));
+						exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
+						playButton.render();
+						replayButton.render();
+						exitButton.render();
+
+						theGameState = playButton.update(theGameState, PLAYING);
+						exitButton.update(elapsedTime);
+
+
+						outputMsg = strMsg[2];
+						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
+						outputMsg = strMsg[3];
+						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 100, 0.0f));
+						outputMsg = strMsg[4];
+						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(100, 150, 0.0f));
+						if (exitButton.getClicked())
+						{
+							SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
+						}
+			}
+				break;
+
 
 
 
