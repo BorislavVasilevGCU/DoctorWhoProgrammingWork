@@ -219,7 +219,11 @@ void cSprite::attachInputMgr(cInputMgr* inputMgr)
 {
 	m_InputMgr = inputMgr;
 }
-
+/*
+=================================================================
+Attach the sound manager to the sprite
+=================================================================
+*/
 void cSprite::attachSoundMgr(cSoundMgr* soundMgr)
 {
 	m_SoundMgr = soundMgr;

@@ -115,32 +115,7 @@ void cButton::update(string fileName, string map)
 			buttonClickedRC.y = (int)(areaClicked.y - spritePos2D.y) / textureHeight;
 			clicked = true;
 
-			cFileHandler aFile(fileName);
-
-			if (!aFile.openFile(ios::out)) //open file clearing the contents
-			{
-				MessageBox(NULL, "Could not open specified file.", "An error occurred", MB_ICONERROR | MB_OK);
-			}
-			else
-			{
-				// Read data from map and write to file
-				string mapData = "";
-				int strPos = 0;
-				for (int row = 0; row < 8; row++)
-				{
-					for (int column = 0; column < 15; column++)
-					{
-						mapData += map[strPos];
-						strPos++;
-					}
-					strPos++;
-					mapData += map[strPos];
-					aFile.writeDataToFile(mapData);
-					mapData = "";
-					strPos++;
-				}
-				aFile.closeFile();
-			}
+			
 			m_InputMgr->clearBuffers(m_InputMgr->MOUSE_BUFFER);// clear mouse buffer.
 		}
 	}

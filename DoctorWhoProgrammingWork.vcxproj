@@ -80,7 +80,6 @@
     <ClCompile Include="cTexture.cpp" />
     <ClCompile Include="cWNDManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mazeMaker.cpp" />
     <ClCompile Include="windowOGL.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +99,6 @@
     <ClInclude Include="cTexture.h" />
     <ClInclude Include="cWNDManager.h" />
     <ClInclude Include="GameConstants.h" />
-    <ClInclude Include="mazeMaker.h" />
     <ClInclude Include="wglext.h" />
     <ClInclude Include="windowOGL.h" />
   </ItemGroup>
@@ -112,6 +110,18 @@
     <Library Include="Libraries\ILU.lib" />
     <Library Include="Libraries\ILUT.lib" />
     <Library Include="Libraries\OpenAL32.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\alut.dll" />
+    <None Include="..\Debug\DevIL.dll" />
+    <None Include="..\Debug\freeglut.dll" />
+    <None Include="..\Debug\freetype.dll" />
+    <None Include="..\Debug\ftgl.dll" />
+    <None Include="..\Debug\ILU.dll" />
+    <None Include="..\Debug\ILUT.dll" />
+    <None Include="..\Debug\OpenAL32.dll" />
+    <None Include="..\Debug\zlib1.dll" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

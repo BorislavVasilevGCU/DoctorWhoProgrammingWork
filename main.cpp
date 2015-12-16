@@ -13,7 +13,6 @@
 #include "cBkGround.h"
 #include "cFontMgr.h"
 #include "asteroidsGame.h"
-#include "mazeMaker.h"
 #include "cFileHandler.h"
 #include "cButton.h"
 #include "cSoundMgr.h"
@@ -76,10 +75,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	// load game sounds
 	// Load Sound
-	LPCSTR gameSounds[1] = { "Audio/131432__senitiel__lasershot.wav"};
+	LPCSTR gameSounds[2] = { "Audio/131432__senitiel__lasershot.wav", "Audio/theme12.wav" };
 
 	//theSoundMgr->add("Theme", gameSounds[0]);
 	theSoundMgr->add("Shot", gameSounds[0]);
+	theSoundMgr->add("ThemeMusic", gameSounds[1]);
 
 	// load game fontss
 	// Load Fonts
@@ -88,15 +88,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	theFontMgr->addFont("SevenSeg", gameFonts[0], 24);
 	theFontMgr->addFont("Space", gameFonts[1], 24);
 
-	// Create vector array of textures
-	LPCSTR texturesToUse[] = { "Images//dalek1.png", "Images//dalek2.png", "Images//dalek3.png", "Images//dalek4.png", "Images//dalek5.png", "Images//dalek6.png", "Images//Laser.png", };
+	// Create vector array of textures for the enemies 
+	LPCSTR enemyTextures[] = { "Images//dalek1.png", "Images//dalek2.png", "Images//dalek3.png", "Images//dalek4.png", "Images//dalek5.png", "Images//dalek6.png", "Images//Laser.png", };
 	for (int tCount = 0; tCount < 7; tCount++)
 	{
 		theGameTextures.push_back(new cTexture());
-		theGameTextures[tCount]->createTexture(texturesToUse[tCount]);
+		theGameTextures[tCount]->createTexture(enemyTextures[tCount]);
 	}
 
-	/// Create vector array of textures
+	/// Create vector array of textures for the 4 backgrounds for the menus
 	vector<cTexture*> textureBkgList;
 	LPCSTR bkgTexturesToUse[] = { "Images/mainlevelbkgsprite.png", "Images/mainmenusprite.jpg", "Images/endgamsprite.jpg", "Images/keyboardbinds.png" };
 	for (int tCount = 0; tCount < 4; tCount++)
@@ -108,26 +108,31 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	cTexture transSprite;
 	transSprite.createTexture("Images/blank.png");
 
-	cBkGround mainLevelBkg;
+	//setting the main level background sprite
+	cBkGround mainLevelBkg; 
 	mainLevelBkg.setSpritePos(glm::vec2(0.0f, 0.0f));
 	mainLevelBkg.setTexture(textureBkgList[0]->getTexture());
 	mainLevelBkg.setTextureDimensions(textureBkgList[0]->getTWidth(), textureBkgList[0]->getTHeight());
 
+	//setting the main menu background sprite
 	cBkGround startMenuBkg;
 	startMenuBkg.setSpritePos(glm::vec2(0.0f, 0.0f));
 	startMenuBkg.setTexture(textureBkgList[1]->getTexture());
 	startMenuBkg.setTextureDimensions(textureBkgList[1]->getTWidth(), textureBkgList[1]->getTHeight());
 
+	//setting the "controls" sprite
 	cBkGround keybinds;
 	keybinds.setSpritePos(glm::vec2(0.0f, 200.0f));
 	keybinds.setTexture(textureBkgList[3]->getTexture());
 	keybinds.setTextureDimensions(963.0f, 450.0f);
 
+	//setting the end game background sprite
 	cBkGround endScreenBkg;
 	endScreenBkg.setSpritePos(glm::vec2(0.0f, 0.0f));
 	endScreenBkg.setTexture(textureBkgList[2]->getTexture());
 	endScreenBkg.setTextureDimensions(textureBkgList[2]->getTWidth(), textureBkgList[2]->getTHeight());
 
+	//creating an array of textures for the buttons
 	vector<cTexture*> btnTextureList;
 	LPCSTR btnTexturesToUse[] = { "Images/StartButton.png", "Images/HowToPlayButton.png", "Images/ExitButton.png", "Images/ReplayButton.png", "Images/BackButton.png" };
 	for (int tCount = 0; tCount < 5; tCount++)
@@ -136,66 +141,69 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		btnTextureList[tCount]->createTexture(btnTexturesToUse[tCount]);
 	}
 
+	//setting the exit button sprite
 	cButton exitButton;
 	exitButton.attachInputMgr(theInputMgr);
 	exitButton.setTexture(btnTextureList[2]->getTexture());
 	exitButton.setTextureDimensions(btnTextureList[2]->getTWidth(), btnTextureList[2]->getTHeight());
 
+	//setting the play button sprite
 	cButton playButton;
 	playButton.attachInputMgr(theInputMgr);
 	playButton.setTexture(btnTextureList[0]->getTexture());
 	playButton.setTextureDimensions(btnTextureList[0]->getTWidth(), btnTextureList[0]->getTHeight());
 
+	//setting the replay button sprite
 	cButton replayButton;
 	replayButton.attachInputMgr(theInputMgr);
 	replayButton.setTexture(btnTextureList[3]->getTexture());
 	replayButton.setTextureDimensions(btnTextureList[3]->getTWidth(), btnTextureList[3]->getTHeight());
 
+	//setting the how to play button sprite
 	cButton howToPlayButton;
 	howToPlayButton.attachInputMgr(theInputMgr);
 	howToPlayButton.setTexture(btnTextureList[1]->getTexture());
 	howToPlayButton.setTextureDimensions(btnTextureList[1]->getTWidth(), btnTextureList[1]->getTHeight());
 
+	//setting the back button sprite
 	cButton backButton;
 	backButton.attachInputMgr(theInputMgr);
 	backButton.setTexture(btnTextureList[4]->getTexture());
 	backButton.setTextureDimensions(btnTextureList[4]->getTWidth(), btnTextureList[4]->getTHeight());
 
-	// include an exit button
 
-	cFileHandler theFile("Data/usermap.dat");
-	string mapData;
 
+	//array of messages which are to be displayed 
 	string outputMsg;
-	string strMsg[] = { "Destroy as many enemy Daleks as possible!", "Use the keys to pilot the TARDIS.", "Doctor Who", "Thanks for playing!", "See you again soon!", "Score:" };
+	string strMsg[] = { "Destroy as many enemy Daleks as possible!", "Use the keys to pilot the TARDIS.", "Doctor Who", "Thanks for playing!", "See you again soon!"};
 
 	cTexture rocketTxt;
-	rocketTxt.createTexture("Images\\Doctor-Who-TARDIS-Air-Freshenersmall.png");
+	rocketTxt.createTexture("Images\\Doctor-Who-TARDIS-Air-Freshenersmall.png");//creating the texture for the player's ship
 	cRocket rocketSprite;
 	rocketSprite.attachInputMgr(theInputMgr); // Attach the input manager to the sprite
-	rocketSprite.setSpritePos(glm::vec2(512.0f, 380.0f));
-	rocketSprite.setTexture(rocketTxt.getTexture());
-	rocketSprite.setTextureDimensions(rocketTxt.getTWidth(), rocketTxt.getTHeight());
-	rocketSprite.setSpriteCentre();
+	rocketSprite.setSpritePos(glm::vec2(512.0f, 380.0f)); //setting the sprite position on the screen 
+	rocketSprite.setTexture(rocketTxt.getTexture()); //setting the texture for the player's ship
+	rocketSprite.setTextureDimensions(rocketTxt.getTWidth(), rocketTxt.getTHeight()); //getting the texture dimensions
+	rocketSprite.setSpriteCentre(); //setting the sprite center
 	rocketSprite.setRocketVelocity(glm::vec2(0.0f, 0.0f));
 
 	// Attach sound manager to rocket sprite
 	rocketSprite.attachSoundMgr(theSoundMgr);
 
-	for (int astro = 0; astro < 15; astro++)
+	//main loop for spawning the enemy sprites
+	for (int astro = 0; astro < 60; astro++)
 	{
-
 		theAsteroids.push_back(new cAsteroid);
-		theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 9 + 1), -10.0f));
+		theAsteroids[astro]->setSpritePos(glm::vec2(windowWidth / (rand() % 10 + 1), -40.0f));
 		theAsteroids[astro]->setSpriteTranslation(glm::vec2((rand() % 5 + 1), 100.0f));
-		theAsteroids[astro]->setTexture(theGameTextures[rand() % 7]->getTexture());
-		theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 7]->getTWidth(), theGameTextures[rand() % 7]->getTHeight());
+		theAsteroids[astro]->setTexture(theGameTextures[rand() % 6]->getTexture());
+		theAsteroids[astro]->setTextureDimensions(theGameTextures[rand() % 6]->getTWidth(), theGameTextures[rand() % 6]->getTHeight());
 		theAsteroids[astro]->setSpriteCentre();
 		theAsteroids[astro]->setAsteroidVelocity(glm::vec2(glm::vec2(0.0f, 0.0f)));
 		theAsteroids[astro]->setActive(true);
 		theAsteroids[astro]->setMdlRadius();
+		}
 
-	}
 
 		gameState theGameState = MENU;
 		btnTypes theBtnType = EXIT;
@@ -209,51 +217,65 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			
-			
-
-			
-			
 			//This is the mainloop, we render frames until isRunning returns false
 			switch (theGameState)
 			{
 			case MENU:
-			{           
-						 startMenuBkg.render();
+			{
 						 
-						 playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
-						 howToPlayButton.setSpritePos(glm::vec2(390.0f, 375.0f));
-						 exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
-						 playButton.render();
-						 howToPlayButton.render();
-						 exitButton.render();
+						 theSoundMgr->getSnd("ThemeMusic")->playAudio(AL_TRUE); //main menu theme music 
+						 startMenuBkg.render(); // render the menu background
 
-						 theGameState = playButton.update(theGameState, PLAYING);
-						 theGameState = howToPlayButton.update(theGameState, INSTRUCTIONS);
-						 exitButton.update(elapsedTime);
+						 playButton.setSpritePos(glm::vec2(400.0f, 300.0f)); //setting the start button sprite position
+						 howToPlayButton.setSpritePos(glm::vec2(390.0f, 375.0f)); //setting the how to play button sprite position
+						 exitButton.setSpritePos(glm::vec2(400.0f, 450.0f)); //setting the exit button sprite position
+						 playButton.render(); //render the play button 
+						 howToPlayButton.render(); //render the how to play button
+						 exitButton.render(); //render the exit button 
 
-						 outputMsg = strMsg[2];
-						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
-						
+
+
+						 theGameState = playButton.update(theGameState, PLAYING); //changing the game state when the play button is pressed 
+						 theGameState = howToPlayButton.update(theGameState, INSTRUCTIONS); //changing the game state when the how to play button is pressed 
+						 if (howToPlayButton.getClicked())
+						 {
+							 PlaySound(TEXT("Audio/107154__bubaproducer__button-7.wav"), NULL, SND_FILENAME | SND_ASYNC); // the sound for when the button is clicked
+							 Sleep(20);
+						 }
+
+						 exitButton.update(elapsedTime); //updating the exit button 
+
+						 outputMsg = strMsg[2]; // getting a message from the array
+						 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f)); //displaying the message on screen at the given position
 
 						 if (exitButton.getClicked())
 						 {
-							 SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL);
+							 SendMessage(pgmWNDMgr->getWNDHandle(), WM_CLOSE, NULL, NULL); //if the exit button is clicked a message is send to close the window 
+							 PlaySound(TEXT("Audio/107154__bubaproducer__button-7.wav"), NULL, SND_FILENAME | SND_ASYNC); //the sound for when exit button is clicked
 						 }
+						
+						
+						 
 			}
 				break;
 
-			case INSTRUCTIONS:
+			case INSTRUCTIONS: //next case for the "How to play" menu
 			{
-								 startMenuBkg.render();
-								 keybinds.render();
+								 startMenuBkg.render(); //render the background for the case 
+								 keybinds.render(); //render the "How to Play" sprite 
 
 
-								 backButton.setSpritePos(glm::vec2(400.0f, 650.0f));
-								 backButton.render();
+								 backButton.setSpritePos(glm::vec2(400.0f, 650.0f)); //setting the back button position on screen
+								 backButton.render(); //render back button  on screen
 
-								 theGameState = backButton.update(theGameState, MENU);
+								 theGameState = backButton.update(theGameState, MENU); //changing the game state when the back button is pressed
+								 if(backButton.getClicked())
+								 {
+									 PlaySound(TEXT("Audio/107154__bubaproducer__button-7.wav"), NULL, SND_FILENAME | SND_SYNC); // the sound for when the button is clicked
+									 Sleep(10);
+								 }
 
+								 //messages to display on the screen
 								 outputMsg = strMsg[2];
 								 theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 								 outputMsg = strMsg[0];
@@ -263,26 +285,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			}
 				break;
 
-				
-			case PLAYING:
+
+			case PLAYING:  //next case the main gameplay scene
 			{
+							
+							mainLevelBkg.render(); // render main level sprite background
 
-							mainLevelBkg.render();
+							exitButton.setSpritePos(glm::vec2(800.0f, 675.0f)); //setting the exit button position on screen
+							exitButton.render(); //render exit button on screen
+							theGameState = exitButton.update(theGameState, END); //changing the game state when the exit button is pressed
 
-							// render button and reset clicked to false
-							exitButton.setSpritePos(glm::vec2(740.0f, 575.0f));
-							exitButton.render();
-							theGameState = exitButton.update(theGameState, END);
-
-							outputMsg = strMsg[2];
+							outputMsg = strMsg[2]; //message to display on screen
 							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 
-							
-							outputMsg = strMsg[5];
-							theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(10, 15, 0.0f));
-							
-							
-						
+
+
+
 							vector<cAsteroid*>::iterator index = theAsteroids.begin();
 							while (index != theAsteroids.end())
 							{
@@ -297,34 +315,32 @@ int WINAPI WinMain(HINSTANCE hInstance,
 									++index;
 								}
 							}
-
+							
+							
 							rocketSprite.update(elapsedTime);
 							rocketSprite.render();
-							
 
-							
+
+
 			}
 				break;
 
-			case END:
+			case END:  //next case the ending scene
 			{
-						endScreenBkg.render();
+						endScreenBkg.render(); // render end screen background sprite
 
-						playButton.setClicked(false);
-						exitButton.setClicked(false);
-						replayButton.setClicked(false);
+						playButton.setClicked(false); //set play button to false
+						exitButton.setClicked(false); //set exit button to false
+						
+						playButton.setSpritePos(glm::vec2(400.0f, 375.0f)); //set play button sprite position on screen 
+						exitButton.setSpritePos(glm::vec2(400.0f, 450.0f)); //set exit button sprite position on screen
+						playButton.render(); //render the play button
+						exitButton.render(); //render the exit button
 
-						playButton.setSpritePos(glm::vec2(400.0f, 300.0f));
-						replayButton.setSpritePos(glm::vec2(400.0f, 375.0f));
-						exitButton.setSpritePos(glm::vec2(400.0f, 450.0f));
-						playButton.render();
-						replayButton.render();
-						exitButton.render();
+						theGameState = playButton.update(theGameState, MENU); //changing the game state when the play button is pressed
+						exitButton.update(elapsedTime); //updating the exit button
 
-						theGameState = playButton.update(theGameState, PLAYING);
-						exitButton.update(elapsedTime);
-
-
+						//message to display on screen 
 						outputMsg = strMsg[2];
 						theFontMgr->getFont("Space")->printText(outputMsg.c_str(), FTPoint(400, 15, 0.0f));
 						outputMsg = strMsg[3];
